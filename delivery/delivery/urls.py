@@ -1,23 +1,17 @@
 from django.contrib import admin
 from django.urls import path
-from api.views import CustomerView, RestaurantListView, RestaurantDetailView, LoginView, RestMenuItemsView
-from api.views import  GetOtpView, VerifyOtpView
 from rest_framework.routers import SimpleRouter
+from api.views import RestaurantDetailView, CustomerView, PartnerView, MenuItemsView, OrderView
 from django.urls.conf import include
 
 
 router = SimpleRouter()
-# router.register('items', MenuItemView)
+router.register('restaurantdetail', RestaurantDetailView)
 router.register('customer', CustomerView)
-router.register('restdetail', RestaurantDetailView)
-# router.register('order', OrderView)
-router.register('menuItems', RestMenuItemsView)
-router.register('login', LoginView)
-
+router.register('partner', PartnerView)
+router.register('menuitems', MenuItemsView)
+router.register('order', OrderView)
 urlpatterns = [
     path('',include(router.urls)),
-    path('restlist/', RestaurantListView.as_view()),
-    path('getotp/', GetOtpView.as_view()),
-    path('verifyotp/', VerifyOtpView.as_view()),
     
 ]
