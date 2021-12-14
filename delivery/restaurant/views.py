@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.decorators import action
 from django.contrib.auth.models import User
-from models import RestaurantOwner,Order, MenuItems
-from serializers import OrderSerializer, OrderSerializer_create, PartnerSerializer, MenuItemsSerializer
+from .models import RestaurantOwner,Order, MenuItems
+from .serializers import OrderSerializer, OrderSerializer_create, PartnerSerializer, MenuItemsSerializer
 
 
 class PartnerView(ModelViewSet):

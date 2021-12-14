@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.decorators import action
 from django.contrib.auth.models import User
-from models import Customer
-from serializers import CustomerSerializer
+from .models import Customer
+from .serializers import CustomerSerializer
 
 
 class CustomerView(ModelViewSet):

@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
-from api.views import RestaurantDetailView, CustomerView, PartnerView, MenuItemsView, OrderView
+from api.views import RestaurantDetailView
+from customer.views import CustomerView
+from restaurant.views import PartnerView, MenuItemsView, OrderView
 from django.urls.conf import include
 
 
