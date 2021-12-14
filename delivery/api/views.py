@@ -1,14 +1,9 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .models import RestaurantList
-from customer.models import Customer
-from restaurant.models import Order, RestaurantOwner, MenuItems
 from .serializers import RestDetailSerializer
-from customer.serializers import CustomerSerializer
-from restaurant.serializers import OrderSerializer, OrderSerializer_create, PartnerSerializer, MenuItemsSerializer
 from rest_framework.response import Response
 import sys
-from datetime import datetime
 from rest_framework.decorators import action
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import SlidingToken,AccessToken
@@ -56,98 +51,9 @@ class RestaurantDetailView(ModelViewSet):
         except Exception as e:
             return Response(str(e))
 
-class CustomerView(ModelViewSet):
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
-    def create(self,request):
-        try:
-            rawData = request.data
-            dob = rawData.get('dob').split('-')
-            dob = datetime(int(dob[0]),int(dob[1]),int(dob[2]))
-            rawData['dob']=dob
-            data = rawData
-            serializer = CustomerSerializer(data=data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            data = {'status': True,
-                    'data': serializer.data,
-                    'error':None
-            }
-            return Response(data)
-        except Exception as e:
-            data = {'status': False,
-                    'data': [],
-                    'error': str(e)
-                    }
-            return Response(data)
-    def list(self,request):
-        try:
-            data = Customer.objects.all()
-            data_serializer = CustomerSerializer(data, many = True)
-            data ={
-                    'status':True,
-                    'data': data_serializer.data,
-                    'error':None
-                    }
-            return Response(data)
-        except Exception as e:
-            return Response(str(e))
-    
-    @action(detail=False, methods=['POST'])
-    def login(self,request):
-        data = request.data
-        otp= '123456'
-        if request.data.get('otp')==otp:
-            user = User.objects.create_user(username=data.get('mobile'),password='password')
-            user.save()
-        return Response(str(AccessToken.for_user(user)))
-
-class PartnerView(ModelViewSet):
-    queryset = RestaurantOwner.objects.all()
-    serializer_class = PartnerSerializer
-    def create(self,request):
-        try:
-            data = request.data
-            user = User.objects.create_user(username=str(data.get('mobile')),password='password')
-            user.save()
-            return Response({'status':'user created'})
-        except Exception as e:
-            return Response(str(e))
 
     @action(detail=False, methods=['POST'])
     def signup(self,request):
         phone = request.data.get('mobile')
         user = User.objects.get(username= str(phone))
         return Response(str(AccessToken.for_user(user)))
-
-class MenuItemsView(ModelViewSet):
-    queryset = MenuItems.objects.all()
-    serializer_class = MenuItemsSerializer
-    def list(self, request, *args, **kwargs):
-        try:
-            data = request.GET.get('restaurant')
-            queryset =MenuItems.objects.filter(restaurant=data)
-            serializer = MenuItemsSerializer(queryset,many=True)
-            return Response(serializer.data)
-        except Exception as e:
-            return Response(str(e))
-        
-    
-
-class OrderView(ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-
-    def create(self,request):
-        try:
-            rawData = request.data
-            serializer = OrderSerializer_create(data=rawData)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            data = {'status': True,
-                    'data': serializer.data,
-                    'error':None
-            }
-            return Response(data)
-        except Exception as e:
-            return Response(str(e))
