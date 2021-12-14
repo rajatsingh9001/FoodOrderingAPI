@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
-from .models import Order, RestaurantList, Customer, RestaurantOwner, MenuItems
-from .serializers import OrderSerializer, OrderSerializer_create, RestDetailSerializer, CustomerSerializer, PartnerSerializer, MenuItemsSerializer
+from .models import RestaurantList
+from customer.models import Customer
+from restaurant.models import Order, RestaurantOwner, MenuItems
+from .serializers import RestDetailSerializer
+from customer.serializers import CustomerSerializer
+from restaurant.serializers import OrderSerializer, OrderSerializer_create, PartnerSerializer, MenuItemsSerializer
 from rest_framework.response import Response
 import sys
 from datetime import datetime
